@@ -14,5 +14,5 @@ export default function App() {
         <Route path="/summary" element={<Summary />} />
       </Routes>
     </Router>
-);
+  );
 }
