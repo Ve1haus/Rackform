@@ -23,10 +23,10 @@ export default function ConfiguratorForm() {
         dimensions: { ...formData.dimensions, [name]: value },
       });
     } else if (step === 3) {
-      const systems = [...formData.systems];
-      if (checked) systems.push(value);
-      else systems.splice(systems.indexOf(value), 1);
-      setFormData({ ...formData, systems });
+      const updated = formData.systems.includes(value)
+        ? formData.systems.filter((s) => s !== value)
+        : [...formData.systems, value];
+      setFormData({ ...formData, systems: updated });
     } else if (step === 4) {
       setFormData({
         ...formData,
@@ -43,40 +43,51 @@ export default function ConfiguratorForm() {
   const prev = () => step > 1 && setStep(step - 1);
 
   return (
-    <div style={{ padding: 20 }}>
-      <h2>Step {step}</h2>
+    <div>
+      <p style={{ fontSize: '0.9rem', color: '#888' }}>Step {step} of 4</p>
       {step === 1 && (
-        <select name="warehouseType" onChange={handleChange} value={formData.warehouseType}>
-          <option value="">Select Warehouse Type</option>
-          <option value="Cold Storage">Cold Storage</option>
-          <option value="Retail">Retail</option>
-          <option value="Industrial">Industrial</option>
-        </select>
+        <>
+          <h2>🏭 Select Your Warehouse Type</h2>
+          <select name="warehouseType" onChange={handleChange} value={formData.warehouseType}>
+            <option value="">-- Choose one --</option>
+            <option value="Cold Storage">❄️ Cold Storage</option>
+            <option value="Retail">🛒 Retail</option>
+            <option value="Industrial">🏗 Industrial</option>
+          </select>
+        </>
       )}
       {step === 2 && (
         <>
-          <input type="number" name="length" placeholder="Length" onChange={handleChange} />
-          <input type="number" name="width" placeholder="Width" onChange={handleChange} />
-          <input type="number" name="height" placeholder="Height" onChange={handleChange} />
+          <h2>📏 Enter Warehouse Dimensions</h2>
+          <label>Length (m):</label>
+          <input type="number" name="length" onChange={handleChange} />
+          <label>Width (m):</label>
+          <input type="number" name="width" onChange={handleChange} />
+          <label>Height (m):</label>
+          <input type="number" name="height" onChange={handleChange} />
         </>
       )}
       {step === 3 && (
         <>
-          <label><input type="checkbox" value="Pallet Racking" onChange={handleChange} /> Pallet Racking</label><br/>
-          <label><input type="checkbox" value="Mezzanine" onChange={handleChange} /> Mezzanine</label><br/>
-          <label><input type="checkbox" value="Partitioning" onChange={handleChange} /> Partitioning</label>
+          <h2>🧱 Select Required Systems</h2>
+          <div style={{ display: 'grid', gap: '8px' }}>
+            <label><input type="checkbox" value="Pallet Racking" onChange={handleChange} /> 📦 Pallet Racking</label>
+            <label><input type="checkbox" value="Mezzanine" onChange={handleChange} /> 🪜 Mezzanine Floor</label>
+            <label><input type="checkbox" value="Partitioning" onChange={handleChange} /> 🧱 Steel Partitioning</label>
+          </div>
         </>
       )}
       {step === 4 && (
         <>
-          <label><input type="checkbox" name="installation" onChange={handleChange} /> Installation Required</label><br/>
-          <label><input type="checkbox" name="fireRating" onChange={handleChange} /> Fire Rated</label><br/>
-          <label><input type="checkbox" name="loadCapacity" onChange={handleChange} /> Load Capacity Needed</label>
+          <h2>⚙️ Additional Options</h2>
+          <label><input type="checkbox" name="installation" onChange={handleChange} /> 🚛 Installation Required</label>
+          <label><input type="checkbox" name="fireRating" onChange={handleChange} /> 🔥 Fire Rated System</label>
+          <label><input type="checkbox" name="loadCapacity" onChange={handleChange} /> 🏋️ High Load Capacity</label>
         </>
       )}
       <div style={{ marginTop: 20 }}>
-        {step > 1 && <button onClick={prev}>Back</button>}
-        <button onClick={next} style={{ marginLeft: 10 }}>Next</button>
+        {step > 1 && <button onClick={prev}>← Back</button>}
+        <button onClick={next} style={{ marginLeft: 10 }}>{step === 4 ? 'View Preview →' : 'Next →'}</button>
       </div>
     </div>
   );
