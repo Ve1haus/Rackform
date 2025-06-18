@@ -1,10 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import ConfiguratorForm from './pages/ConfiguratorForm';
-import '../index.css';
+import App from './App';
+
+console.log('Mounting React app...');
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <ConfiguratorForm />
+    <App />
   </React.StrictMode>
 );
